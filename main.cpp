@@ -1,38 +1,70 @@
 #include <iostream>
-#include <string>
+#include "Movies.h"
 
+// Function prototypes
+void increment_watched(Movies &movies, std::string name);
+void add_movie(Movies &movies, std::string name, std::string rating, int watched);
 
-using namespace std;
+/******************************************************************
+ * helper function 
+ * increment_watched expects a reference to a Movies object 
+ * and the name of the movie to increment the watched count
+ *
+ * If the watched count was incremented successfully it
+*  displays a success message
+*  otherwise the watched count could not be incremented
+*  because the name of the movie was not found
+ * ***************************************************************/
 
-
-int* apply_all (int *array1, size_t dim1, int *array2, size_t dim2){
-    int *array3 {};
-    int count = 0;
-    array3 = new int[dim1*dim2];
-    for (size_t i=0; i<dim1; i++){
-        for(size_t j=0; j<dim2; j++){
-            *(array3 + count) = array1[i]*array2[j]; //or array3[count]
-            count++;
-        }
+void increment_watched(Movies &movies, std::string name) {
+    if (movies.increment_watched(name)) {
+        std::cout << name << " watch incremented" <<  std::endl;
+    } else {
+        std::cout << name << " not found" <<  std::endl;
     }
-    return array3;
-} 
+}
 
-
-int main()
-{ 
-    int array1 [] {1,2,3,4,5};
-    int array2 [] {10, 20, 30};
-
-    
-    int *final_array=apply_all(array1, 5, array2, 3);
-    
-    for (size_t i=0; i<15; i++){
-        cout << final_array[i] << endl;
+/******************************************************************
+* helper function
+*  add_movie expects a reference to a Movies object 
+ * and the name of the movie, the rating and the watched count
+ *
+ * If the movie was successfully added to the movies object it
+*  displays a success message
+*  otherwise the movie was not added 
+*  because the name of the movie was already in movies
+ * ***************************************************************/
+void add_movie(Movies &movies, std::string name, std::string rating, int watched) {
+    if (movies.add_movie(name,rating,watched)) {
+        std::cout << name << " added" << std::endl;
+    } else {
+        std::cout << name << " already exists" <<  std::endl;
     }
+}
+
+int main() {
     
-    delete [] final_array;
+    Movies my_movies;
     
+    my_movies.display();
     
+    add_movie(my_movies, "Big", "PG-13",2);                 // OK
+    add_movie(my_movies,"Star Wars", "PG",5);             // OK
+    add_movie(my_movies,"Cinderella", "PG",7);            // OK
+     
+    my_movies.display();   // Big, Star Wars, Cinderella
+    
+    add_movie(my_movies,"Cinderella", "PG",7);            // Already exists
+    add_movie(my_movies,"Ice Age", "PG",12);              // OK
+ 
+    my_movies.display();    // Big, Star Wars, Cinderella, Ice Age
+    
+    increment_watched(my_movies,"Big");                    // OK
+    increment_watched(my_movies,"Ice Age");              // OK
+    
+   my_movies.display();    // Big and Ice Age watched count incremented by 1
+    
+    increment_watched(my_movies,"XXX");     // XXX not found
+
 	return 0;
 }

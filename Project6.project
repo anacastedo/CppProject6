@@ -8,6 +8,10 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
+    <File Name="Movie.cpp"/>
+    <File Name="Movie.h"/>
+    <File Name="Movies.cpp"/>
+    <File Name="Movies.h"/>
     <File Name="main.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
